@@ -97,6 +97,7 @@ class Teacher(Worker):
             return self.students[index]
         except:
             return "No student was found by this index"
+        
     def accept_student(self, student):
         if student not in self.students:
             self.students.append(student)
