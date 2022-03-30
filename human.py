@@ -47,10 +47,11 @@ class Child(Human):
         self.play = play
 
     def play(self):
-        if play:
+        if self.play:
             return f"{self.name} is playing."
         else:
             return f"{self.name} doesn't want to play."
+
 
 class Student(Adult):
     study_hours = 300
@@ -97,7 +98,7 @@ class Teacher(Worker):
     def __getitem__(self, index):
         try:
             return self.students[index]
-        except:
+        except IndexError:
             return "No student was found by this index"
         
     def accept_student(self, student):
