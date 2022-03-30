@@ -71,7 +71,7 @@ class Worker(Adult):
         self.pay = pay
 
     def work(self):
-        self.pay *= Worker.increase_pay
+        self.pay *= self.increase_pay
 
 
 class Teacher(Worker):
