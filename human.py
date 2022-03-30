@@ -50,7 +50,7 @@ class Child(Human):
         if play:
             return f"{self.name} is playing."
         else:
-            return f"{self.name} don't want to play."
+            return f"{self.name} doesn't want to play."
 
 class Student(Adult):
     study_hours = 300
