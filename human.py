@@ -47,8 +47,10 @@ class Child(Human):
         self.play = play
 
     def play(self):
-        return f"{self.name} is playing."
-
+        if play:
+            return f"{self.name} is playing."
+        else:
+            return f"{self.name} don't want to play."
 
 class Student(Adult):
     study_hours = 300
