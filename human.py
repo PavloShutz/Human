@@ -7,7 +7,7 @@ class Human:
         self.age = age
 
     def __str__(self):
-        return f"{self.name.title()} {self.surname.title()}. Age: {self.age}"
+        return f"{self.name.title()} {self.surname.title()}, age: {self.age}"
 
     def __repr__(self):
         return f"Human {self.name.title()} {self.surname.title()}, age: {self.age}"
@@ -34,15 +34,15 @@ class Adult(Human):
         super().__init__(name, surname, age)
         self.election = election
 
-    def go_to_the_polling(self):
+    def elect(self):
         if self.election:
-            return f"{self.name}'s going to the polling."
+            return f"{self.name.title()}'s going to an election."
         else:
-            return f"{self.name} isn't going to the polling."
+            return f"{self.name.title()} isn't going to an election."
 
 
 class Child(Human):
-    def __init__(self, name, surname, age, play=False):
+    def __init__(self, name, surname, age, play=True):
         super().__init__(name, surname, age)
         self.play = play
 
@@ -55,8 +55,9 @@ class Child(Human):
 
 class Student(Adult):
     study_hours = 300
+    marks = []
 
-    def __init__(self, name, surname, age, election, subject):
+    def __init__(self, name, surname, age, subject, election=False):
         super().__init__(name, surname, age, election)
         self.subject = subject
 
@@ -64,6 +65,9 @@ class Student(Adult):
         if Student.study_hours > 0:
             Student.study_hours -= 1.5
         return f"{self.name} studies {self.subject}"
+
+    def show_marks(self):
+        return f"{self.name}'s marks: " + ", ".join([str(mark) for mark in Student.marks])
 
 
 class Worker(Adult):
@@ -74,7 +78,8 @@ class Worker(Adult):
         self.pay = pay
 
     def work(self):
-        self.pay *= self.increase_pay
+        self.pay *= Worker.increase_pay
+        return self.pay
 
 
 class Teacher(Worker):
@@ -100,11 +105,16 @@ class Teacher(Worker):
             return self.students[index]
         except IndexError:
             return "No student was found by this index"
-        
+
+    def evaluate_student(self, mark, student=Student):
+        if type(mark) is not int:
+            raise Exception(f"mark must be an integer, except got: {mark}")
+        student.marks.append(mark)
+
     def accept_student(self, student):
-        if student not in self.students:
+        if student not in self.students and type(student) is Student:
             self.students.append(student)
-        return 'Students: ' + ', '.join(student for student in self.students)
+        return 'Students: \n' + '\n'.join([str(student) for student in self.students])
 
     def remove_student(self, student):
         if student in self.students or Student.study_hours == 0:
