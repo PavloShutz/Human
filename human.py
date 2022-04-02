@@ -16,16 +16,16 @@ class Human:
         return "Who called me?"
 
     def eat(self):
-        if Human.energy < 150:
-            Human.energy += 5
+        if self.energy < 150:
+            self.energy += 5
 
     def sleep(self):
-        if Human.energy < 150:
-            Human.energy += 25
+        if self.energy < 150:
+            self.energy += 25
 
     def walk(self):
-        if Human.energy > 15:
-            Human.energy -= 10
+        if self.energy > 15:
+            self.energy -= 10
 
 
 class Adult(Human):
