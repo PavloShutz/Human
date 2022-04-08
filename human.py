@@ -7,13 +7,28 @@ class Human:
         self.age = age
 
     def __str__(self):
-        return f"{self.name.title()} {self.surname.title()}, age: {self.age}"
+        return f"{self.name.title()} {self.surname.title()}"
 
     def __repr__(self):
-        return f"Human {self.name.title()} {self.surname.title()}, age: {self.age}"
+        return f"Human {self.name.title()} {self.surname.title()}"
 
     def __call__(self):
         return "Who called me?"
+
+    @property
+    def fullname(self):
+        return f"{self.name.title()} {self.surname.title()}"
+
+    @fullname.setter
+    def fullname(self, string):
+        name, surname = string.split()
+        self.name = name
+        self.surname = surname
+
+    @fullname.deleter
+    def fullname(self):
+        self.name = None
+        self.surname = None
 
     def eat(self):
         if self.energy < 150:
@@ -53,12 +68,12 @@ class Child(Human):
             return f"{self.name} doesn't want to play."
 
 
-class Student(Adult):
+class Student(Human):
     study_hours = 300
     marks = []
 
-    def __init__(self, name, surname, age, subject, election=False):
-        super().__init__(name, surname, age, election)
+    def __init__(self, name, surname, age, subject):
+        super().__init__(name, surname, age)
         self.subject = subject
 
     def study(self):
@@ -66,8 +81,13 @@ class Student(Adult):
             Student.study_hours -= 1.5
         return f"{self.name} studies {self.subject}"
 
-    def show_marks(self):
-        return f"{self.name}'s marks: " + ", ".join([str(mark) for mark in Student.marks])
+    @property
+    def student_marks(self):
+        return f"{self.name}'s marks: " + ", ".join([str(mark) for mark in self.marks])
+
+    @student_marks.deleter
+    def student_marks(self):
+        self.marks = []
 
 
 class Worker(Adult):
@@ -109,12 +129,13 @@ class Teacher(Worker):
     def evaluate_student(self, mark, student=Student):
         if type(mark) is not int:
             raise Exception(f"mark must be an integer, except got: {mark}")
-        student.marks.append(mark)
+        if student.subject == self.subject and student in self.students:
+            student.marks.append(mark)
 
-    def accept_student(self, student):
-        if student not in self.students and type(student) is Student:
-            self.students.append(student)
-        return 'Students: \n' + '\n'.join([str(student) for student in self.students])
+    def accept_student(self, *students):
+        for student in students:
+            if student not in self.students and type(student) is Student:
+                self.students.append(student)
 
     def remove_student(self, student):
         if student in self.students or Student.study_hours == 0:
@@ -124,4 +145,11 @@ class Teacher(Worker):
     def add_student_to_black_list(self, student):
         if student in self.students:
             self.black_list_of_students.append(student)
-        return 'Black list: ' + ', '.join(student for student in self.black_list_of_students)
+
+    @property
+    def blacklist(self):
+        return 'Black list: ' + ', \n'.join(str(student) for student in self.black_list_of_students)
+
+    @property
+    def students_list(self):
+        return 'Students: ' + ', '.join(str(student) for student in self.students)
