@@ -5,7 +5,6 @@ class Human:
         self.name = name
         self.surname = surname
         self.age = age
-        self.__full_info = [name, surname, age]
         self.__index = 0
 
     def __str__(self):
@@ -22,11 +21,12 @@ class Human:
         return self
 
     def __next__(self):
-        if self.__index >= len(self.__full_info):
+        __full_info = [self.name, self.surname, self.age]
+        if self.__index >= len(__full_info):
             raise StopIteration
         index = self.__index
         self.__index += 1
-        return self.__full_info[index]
+        return __full_info[index]
 
     @property
     def fullname(self):
@@ -87,7 +87,6 @@ class Student(Human):
         self.subject = subject
         self.marks = []
         self.__index = 0
-        self.__full_info = [name, surname, age]
 
     def study(self):
         if Student.study_hours > 0:
@@ -99,11 +98,12 @@ class Student(Human):
         return self
 
     def __next__(self):
-        if self.__index >= len(self.__full_info):
+        __full_info = [self.name, self.surname, self.age]
+        if self.__index >= len(__full_info):
             raise StopIteration
         index = self.__index
         self.__index += 1
-        return self.__full_info[index]
+        return __full_info[index]
 
     @property
     def student_marks(self):
@@ -132,7 +132,7 @@ class Teacher(Worker):
     def __init__(self, name, surname, age, pay, subject, *students):
         super().__init__(name, surname, age, pay)
         self.subject = subject
-        self.students = list(students) if students else []
+        self.students = [student for student in students if isinstance(student, Student)]
         self.black_list_of_students = []
         self.__index = 0
 
