@@ -1,2 +1,1 @@
-# Human
- 
+Simple implementation of human in Python
